@@ -1,0 +1,74 @@
+services:
+    app:
+        build: _docker/php83
+        environment:
+            - TZ=Europe/Prague
+            - DEBIAN_FRONTEND=noninteractive
+        volumes:
+            - ./public:/var/www/public
+            - .:/var/www
+            - ./_docker/php83/conf.d/apache2.conf:/etc/apache2/apache2.conf
+            - ./_docker/php83/conf.d/apache-virtualhost.conf:/etc/apache2/sites-available/000-default.conf
+            - ./_docker/php83/conf.d/php.ini:/usr/local/etc/php/php.ini
+        working_dir: /var/www/public
+        networks:
+            - apploudnet
+    mercure:
+        image: dunglas/mercure
+        restart: unless-stopped
+        #    ports:
+        #      - "80:80"
+        environment:
+            SERVER_NAME: ':80'
+
+            # Uncomment the following line to disable HTTPS,
+            #SERVER_NAME: ':80'
+            MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
+            MERCURE_EXTRA_DIRECTIVES: |
+                cors_origins http://localhost:9013
+        # Comment the following line to disable the development mode
+        command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
+        healthcheck:
+            test: ["CMD", "curl", "-f", "https://localhost/healthz"]
+            timeout: 5s
+            retries: 5
+            start_period: 60s
+        networks:
+            - apploudnet
+        volumes:
+            - mercure_data:/data
+            - mercure_config:/config
+        #
+    db:
+        image: mysql:8.0.39
+        restart: always
+        volumes:
+            - ./_docker/mysql:/etc/mysql
+            - ./_docker/mysql/data:/var/lib/mysql
+            - ./_docker/mysql/init:/docker-entrypoint-initdb.d/
+            - ./_docker/mysql/dumps:/dumps
+        environment:
+            - MYSQL_SERVER=apploudgit
+            - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - apploudnet
+
+    redis:
+        image: redis:4-alpine
+        networks:
+            - apploudnet
+
+networks:
+    apploudnet:
+        driver: bridge
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+  mercure_data:
+  mercure_config:
+###< doctrine/doctrine-bundle ###
+
+
