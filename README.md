@@ -39,4 +39,9 @@ php bin/console app:gitlab-members
 ```
 
 # Other things
-The container has already configured a Mercure and Redis server for future developments. 
+- The container has already configured a Mercure and Redis server for future developments.
+- Code check via PHP Stan (level 5) and PHP CodeSniffer.
+```bash
+./vendor/bin/phpstan analyse -l 5 src 
+./vendor/bin/phpcs  src
+```
