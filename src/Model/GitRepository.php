@@ -19,6 +19,7 @@ class GitRepository
 
     /**
      * Data to be displayed are retrieved and formatted
+     * TODO: do a check on using php array features for better and faster performance
      *
      * @return array
      */
