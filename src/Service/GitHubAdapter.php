@@ -10,11 +10,15 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
 /**
  * TODO to be moved to tests and implement everything
+ * the constructor can possibly receive another “RAW”
+ * gitHub interface so that the real methods and
+ * terminologies can be adapted e.g. teams-> groups etc...
  */
 readonly class GitHubAdapter implements GitAdapterInterface
 {
     public function __construct(
         // TODO implement me
+        // Inject eventually gitHub inerface (if necessary)
     ) {
     }
 
@@ -105,9 +109,9 @@ readonly class GitHubAdapter implements GitAdapterInterface
         yield
             [
                 'id' => 'None',
-                    'name' => 'None',
-            'full_path' => 'None',
-        ]
+                'name' => 'None',
+                'full_path' => 'None',
+           ]
         ; // TODO implement me
     }
 

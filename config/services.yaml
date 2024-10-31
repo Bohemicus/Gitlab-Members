@@ -36,3 +36,4 @@ services:
 
     App\Service\GitAdapterInterface: '@gitlab.adapter'
 #    App\Service\GitAdapterInterface: '@gitlab.adapter' TODO for gitHub Statistics
+# If you decide to make the switch, from gitLab to gitHub.
