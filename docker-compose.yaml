@@ -12,7 +12,7 @@ services:
             - ./_docker/php83/conf.d/php.ini:/usr/local/etc/php/php.ini
         working_dir: /var/www/public
         networks:
-            - apploudnet
+            - kriteknet
     mercure:
         image: dunglas/mercure
         restart: unless-stopped
@@ -36,7 +36,7 @@ services:
             retries: 5
             start_period: 60s
         networks:
-            - apploudnet
+            - kriteknet
         volumes:
             - mercure_data:/data
             - mercure_config:/config
@@ -53,15 +53,15 @@ services:
             - MYSQL_SERVER=apploudgit
             - MYSQL_ROOT_PASSWORD=root
         networks:
-            - apploudnet
+            - kriteknet
 
     redis:
         image: redis:4-alpine
         networks:
-            - apploudnet
+            - kriteknet
 
 networks:
-    apploudnet:
+    kriteknet:
         driver: bridge
 
 volumes:

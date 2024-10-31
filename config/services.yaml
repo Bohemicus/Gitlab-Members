@@ -23,9 +23,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Service\GitLabAdapter:
+    gitlab.adapter:
+        class: App\Service\GitLabAdapter
         arguments:
             $apiUrl:  '%env(GITLAB_URL)%'
             $groupId: '%env(GITLAB_GROUP_ID)%'
             $token:   '%env(GITLAB_TOKEN)%'
             $perPage: '%env(GITLAB_ROW_PER_PAGE)%'
+
+    github.adapter:
+        class: App\Service\GitHubAdapter # TODO to be moved to tests and implement everything
+
+    App\Service\GitAdapterInterface: '@gitlab.adapter'
+#    App\Service\GitAdapterInterface: '@gitlab.adapter' TODO for gitHub Statistics
